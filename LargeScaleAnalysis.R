@@ -6,7 +6,7 @@
 # Look at the fastq files which should make have the barcodes in the readname
 # CCGAGTTA -> Bru-3
 
-setwd('~/Documents/UT Austin Postdoc/Analysis/Bru_hyg_day0_sequencing/')
+setwd('~/Desktop/Shilpa/shilpa/')
 control_1 = read.table('./Bru_hyg_1_1.txt', header= T)
 control_2 = read.table('./Bru_hyg_2_1.txt', header= T)
 
@@ -34,6 +34,7 @@ colSums(all_sgRNA_counts)
 # In future work, we can think of better normalization methods
 normalized_all_sgRNA_counts = apply(all_sgRNA_counts , 1, function (x) {1000000 * x / colSums(all_sgRNA_counts) })
 normalized_all_sgRNA_counts  = t(normalized_all_sgRNA_counts)
+write.csv (normalized_all_sgRNA_counts, file = "Normalized_sgRNA_counts.csv")
 
 # Number of sgRNAs with counts less than threshold
 threshold = 1
@@ -75,6 +76,8 @@ sgRNAs_nonessential_translation =   gene_names %in% nonessential_translation_reg
 
 # One strategy is to take the sgRNAs that enriched compared to control and look for enrichment
 control_mean = (normalized_all_sgRNA_counts[,2] + normalized_all_sgRNA_counts[,3])  / 2
+
+# We defined enrichment with respect to the mean count in two replicates of reduced here.
 reduced_mean = (normalized_all_sgRNA_counts[,6] + normalized_all_sgRNA_counts[,7])  / 2
 
 ratio_reduced =  reduced_mean / (control_mean + 1 )  
@@ -83,6 +86,7 @@ enriched_in_reduced = ratio_reduced > 1.25
 sum ( gene_names == "Control" ) 
 write.csv ( sort ( table ( gene_names[enriched_in_reduced] ), decreasing = T ) , file = "Enriched_Genes_Reduced.csv") 
 
+# Enrichment in increased.
 ratio_increased =  normalized_all_sgRNA_counts[,4] / (control_mean + 1 )  
 enriched_in_increased = ratio_increased > 1.6
 sort ( table ( gene_names[enriched_in_increased] ), decreasing = T ) 
@@ -110,6 +114,50 @@ fisher.test(fmat)
 fmat[1,] = c(2, 212)
 fmat[2,] = c(121, 19115 - 335  )
 fisher.test(fmat)
+
+# Define enrichment for each replicate of the reduced and look at consistency
+ratio_reduced1_control = normalized_all_sgRNA_counts[,5] / (control_mean + 1 ) 
+ratio_reduced2_control = normalized_all_sgRNA_counts[,6] / (control_mean + 1 ) 
+ratio_reduced3_control = normalized_all_sgRNA_counts[,7] / (control_mean + 1 ) 
+
+
+# These thresholds correspond to 10% Non-targeting controls
+enriched_in_ratio_reduced1 = ratio_reduced1_control > 1.52
+# The difference in the threshold suggest second reduced is better 
+enriched_in_ratio_reduced2 = ratio_reduced2_control > 1.352
+enriched_in_ratio_reduced3 = ratio_reduced3_control > 1.363
+
+# These thresholds correspond to 5% Non-targeting controls
+enriched_in_ratio_reduced1 = ratio_reduced1_control > 1.7
+# The difference in the threshold suggest second reduced is better 
+enriched_in_ratio_reduced2 = ratio_reduced2_control > 1.485
+enriched_in_ratio_reduced3 = ratio_reduced3_control > 1.497
+head ( sort ( table ( gene_names[enriched_in_ratio_reduced3] ), decreasing = T ) ) 
+
+enrichment_matrix = cbind (enriched_in_ratio_reduced1, 
+                           enriched_in_ratio_reduced2, 
+                           enriched_in_ratio_reduced3)
+
+colSums(enrichment_matrix)
+# 10473                      11511                      10102 
+# We expect at 10%  Threshold to detect 
+# 7744
+
+table ( rowSums(enrichment_matrix) ) 
+#     0     1     2     3 
+# 52187 19279  5118   857
+# Random chance of having three guides
+( 10473 * 11511 * 10102) / 77441 ^3
+# 0.002622278 * 77441 = 203 expected by chance. Observed 857! 
+
+( 7160 * 7785 * 6578) / 77441 ^3
+# 61.13974 expected 408
+
+head( sort (table ( gene_names[rowSums(enrichment_matrix)  == 3 ]  ), decreasing = T )  ) 
+head( sort (table ( gene_names[rowSums(enrichment_matrix)  > 1 ]  ), decreasing = T )  ) 
+
+# How many genes have two or more guides in at least 2 replicates
+
 
 # Is there an enrichment of these lists among the GO term translation regulators. 
 length ( unique ( gene_names[ sgRNAs_nonessential_translation ]  )  ) 
