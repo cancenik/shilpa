@@ -50,6 +50,9 @@ round ( cor (all_sgRNA_counts, method = "spearman") , 3 )
 
 # Is there a depletion for essential genes in Control population compared to Plasmid? 
 essentials = read.csv('./K562_essential_genes_depmap.csv')
+essentials_alternative_list = read.csv('./K562_essential genes.csv')
+
+essentials_merged = union(essentials$Genes, essentials_alternative_list$Genes)
 
 gene_names = unlist(lapply ( strsplit(row.names(all_sgRNA_counts), split = "_"), "[[" , 1 ) )
 color_vector = rep ("gray", nrow (all_sgRNA_counts))
@@ -154,10 +157,10 @@ table ( rowSums(enrichment_matrix) )
 # 61.13974 expected 408
 
 head( sort (table ( gene_names[rowSums(enrichment_matrix)  == 3 ]  ), decreasing = T )  ) 
-head( sort (table ( gene_names[rowSums(enrichment_matrix)  > 1 ]  ), decreasing = T )  ) 
 
 # How many genes have two or more guides in at least 2 replicates
-
+atleast_two_replicates = head( sort (table ( gene_names[rowSums(enrichment_matrix)  > 1 ]  ), decreasing = T ), 226  ) 
+as.character(unlist(dimnames(atleast_two_replicates)) ) 
 
 # Is there an enrichment of these lists among the GO term translation regulators. 
 length ( unique ( gene_names[ sgRNAs_nonessential_translation ]  )  ) 
