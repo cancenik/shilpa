@@ -160,7 +160,12 @@ head( sort (table ( gene_names[rowSums(enrichment_matrix)  == 3 ]  ), decreasing
 
 # How many genes have two or more guides in at least 2 replicates
 atleast_two_replicates = head( sort (table ( gene_names[rowSums(enrichment_matrix)  > 1 ]  ), decreasing = T ), 226  ) 
-as.character(unlist(dimnames(atleast_two_replicates)) ) 
+atleast_two_replicates_genes = as.character(unlist(dimnames(atleast_two_replicates)) ) 
+
+enrichment_matrix_controls = enrichment_matrix[gene_names == "Control", ]
+write.csv(enrichment_matrix_controls, row.names = T, file= "./ControlsgRNAs_Enriched.csv")
+
+sum ( atleast_two_replicates_genes %in% essentials_merged ) 
 
 # Is there an enrichment of these lists among the GO term translation regulators. 
 length ( unique ( gene_names[ sgRNAs_nonessential_translation ]  )  ) 
