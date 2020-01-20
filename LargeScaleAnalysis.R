@@ -24,6 +24,12 @@ control_day20_2 = read.table('./10_28_2019/Readcount_191203_193549_9370/Bru_hyg_
 newgate_increased = read.table('./10_28_2019/Readcount_191203_193549_9370/Bru_hyg_sorted_newgate_Increased_TA.txt', header = T)
 newgate_reduced = read.table('./10_28_2019/Readcount_191203_193549_9370/Bru_hyg_sorted_newgate_Reduced_TA_1.txt', header = T)
 
+# # This section extracts K562 expression from CCLE RNA-Seq
+# cell_line_expression = read.table('./CCLE_RNAseq_genes_rpkm_20180929.gct', skip  = 2, header= T)
+# k562_idx = grep ( 'K562', colnames(cell_line_expression) )
+# k562_expression = cell_line_expression [, c(1,2,k562_idx) ]
+# k562_expression = k562_expression [order(k562_expression$K562_HAEMATOPOIETIC_AND_LYMPHOID_TISSUE, decreasing = T) ,]
+# write.table(k562_expression, file = './k562_gene_rpkm_ccle_rnaseq.tsv', quote = F, sep = "\t")
 
 all_sgRNA_counts = cbind(plasmid$Count, control_1$Count, control_2$Count,
                          increased_1$Count, 

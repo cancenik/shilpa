@@ -1,0 +1,95 @@
+INFO  @ Mon, 20 Jan 2020 09:47:19: Parameters: /opt/miniconda3/envs/mageckenv/bin/mageck test -k Mageck_Input.tsv -t Control20_1,Control20_2 -c Control_1,Control_2 --remove-zero control --control-sgrna Control.txt -n mageck_essential 
+INFO  @ Mon, 20 Jan 2020 09:47:19: Welcome to MAGeCK v0.5.9.2. Command: test 
+INFO  @ Mon, 20 Jan 2020 09:47:19: Loading count table from Mageck_Input.tsv  
+INFO  @ Mon, 20 Jan 2020 09:47:19: Processing 1 lines.. 
+DEBUG @ Mon, 20 Jan 2020 09:47:19: Parsing error in line 1 (usually the header line). Skip this line. 
+INFO  @ Mon, 20 Jan 2020 09:47:20: Loaded 77441 records. 
+INFO  @ Mon, 20 Jan 2020 09:47:20: Loading R template file: /opt/miniconda3/envs/mageckenv/lib/python3.7/site-packages/mageck/plot_template.RTemplate. 
+INFO  @ Mon, 20 Jan 2020 09:47:20: Loading R template file: /opt/miniconda3/envs/mageckenv/lib/python3.7/site-packages/mageck/plot_template_indvgene.RTemplate. 
+INFO  @ Mon, 20 Jan 2020 09:47:20: Loading Rnw template file: /opt/miniconda3/envs/mageckenv/lib/python3.7/site-packages/mageck/plot_template.Rnw. 
+DEBUG @ Mon, 20 Jan 2020 09:47:20: Setting up the visualization module... 
+DEBUG @ Mon, 20 Jan 2020 09:47:20: Given sample labels: Control20_1,Control20_2 
+DEBUG @ Mon, 20 Jan 2020 09:47:20: Converted index: 2 3 
+INFO  @ Mon, 20 Jan 2020 09:47:20: Treatment samples:Control20_1,Control20_2 
+INFO  @ Mon, 20 Jan 2020 09:47:20: Treatment sample index:2,3 
+DEBUG @ Mon, 20 Jan 2020 09:47:20: Given sample labels: Control_1,Control_2 
+DEBUG @ Mon, 20 Jan 2020 09:47:20: Converted index: 0 1 
+INFO  @ Mon, 20 Jan 2020 09:47:20: Control samples:Control_1,Control_2 
+INFO  @ Mon, 20 Jan 2020 09:47:20: Control sample index:0,1 
+DEBUG @ Mon, 20 Jan 2020 09:47:20: Initial (total) size factor: 1.6981782020684169 1.17525693058423 0.858744959368109 0.7164525838078131 
+DEBUG @ Mon, 20 Jan 2020 09:47:21: Median factor: 1.6056131143821524 1.1066819197003215 0.8653789518415529 0.720216875691733 
+INFO  @ Mon, 20 Jan 2020 09:47:21: Final size factor: 1.6056131143821524 1.1066819197003215 0.8653789518415529 0.720216875691733 
+INFO  @ Mon, 20 Jan 2020 09:47:21: Detecting outliers from variance estimation.. Avg read count:[33.20970089917651], Var: [640.3420015457359] 
+INFO  @ Mon, 20 Jan 2020 09:47:21: Skipping 181 sgRNAs from variance calculation because of their extreme high counts (> 4* STD (mean counts) ). 
+DEBUG @ Mon, 20 Jan 2020 09:47:22: Adjusted model: 1.0285205387967284	0.5258290580799926 
+INFO  @ Mon, 20 Jan 2020 09:47:22: Before RRA, 556 sgRNAs are removed with zero counts in control group(s). 
+INFO  @ Mon, 20 Jan 2020 09:47:22: Use qnorm to reversely calculate sgRNA scores ... 
+DEBUG @ Mon, 20 Jan 2020 09:47:24: lower test FDR cutoff: 0.3685504324640697 
+DEBUG @ Mon, 20 Jan 2020 09:47:25: higher test FDR cutoff: 0.3652598036027834 
+INFO  @ Mon, 20 Jan 2020 09:47:25: Running command: RRA -i mageck_essential.plow.txt -o mageck_essential.gene.low.txt -p 0.3685504324640697 --control Control.txt --skip-gene NA --skip-gene na  
+INFO  @ Mon, 20 Jan 2020 09:47:27: Command message: 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Welcome to RRA v 0.5.9. 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   1001 control sequences loaded. 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Skipping gene NA for permutation ... 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Skipping gene na for permutation ... 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Reading input file... 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Summary: 76885 sgRNAs, 19115 genes, 1 lists; skipped sgRNAs:0 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Computing lo-values for each group... 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Skipping gene Control for permutation ... 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Warning: sgRNA  not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Warning: sgRNA Control_CCGTCTCCGCATCGTCTTTT not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Warning: sgRNA Control_CCTTGGCGAGACGGAGGTAC not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Warning: sgRNA Control_CGTCCCTTCGTCTCTGCTTA not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Warning: sgRNA Control_CTGCACTGTGGAGACGCCCG not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Warning: sgRNA Control_CTTTTCAGCTGAGACGTACG not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Warning: sgRNA Control_TCTCGTAGCCTAATGCGCCA not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Computing false discovery rate... 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Total # control sgRNAs: 994 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Permuting genes with 1 sgRNAs... 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Permuting genes with 2 sgRNAs... 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Permuting genes with 3 sgRNAs... 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Permuting genes with 4 sgRNAs... 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Number of genes under FDR adjustment: 19115 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Saving to output file... 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   Suppressing the output of gene Control since it is negative ontrol genes. 
+INFO  @ Mon, 20 Jan 2020 09:47:27:   RRA completed. 
+INFO  @ Mon, 20 Jan 2020 09:47:27:    
+INFO  @ Mon, 20 Jan 2020 09:47:27: End command message. 
+INFO  @ Mon, 20 Jan 2020 09:47:27: Running command: RRA -i mageck_essential.phigh.txt -o mageck_essential.gene.high.txt -p 0.3652598036027834 --control Control.txt --skip-gene NA --skip-gene na  
+INFO  @ Mon, 20 Jan 2020 09:47:30: Command message: 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Welcome to RRA v 0.5.9. 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   1001 control sequences loaded. 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Skipping gene NA for permutation ... 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Skipping gene na for permutation ... 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Reading input file... 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Summary: 76885 sgRNAs, 19115 genes, 1 lists; skipped sgRNAs:0 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Computing lo-values for each group... 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Skipping gene Control for permutation ... 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Warning: sgRNA  not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Warning: sgRNA Control_CCGTCTCCGCATCGTCTTTT not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Warning: sgRNA Control_CCTTGGCGAGACGGAGGTAC not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Warning: sgRNA Control_CGTCCCTTCGTCTCTGCTTA not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Warning: sgRNA Control_CTGCACTGTGGAGACGCCCG not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Warning: sgRNA Control_CTTTTCAGCTGAGACGTACG not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Warning: sgRNA Control_TCTCGTAGCCTAATGCGCCA not found in the ranked list.  
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Computing false discovery rate... 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Total # control sgRNAs: 994 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Permuting genes with 1 sgRNAs... 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Permuting genes with 2 sgRNAs... 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Permuting genes with 3 sgRNAs... 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Permuting genes with 4 sgRNAs... 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Number of genes under FDR adjustment: 19115 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Saving to output file... 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   Suppressing the output of gene Control since it is negative ontrol genes. 
+INFO  @ Mon, 20 Jan 2020 09:47:30:   RRA completed. 
+INFO  @ Mon, 20 Jan 2020 09:47:30:    
+INFO  @ Mon, 20 Jan 2020 09:47:30: End command message. 
+DEBUG @ Mon, 20 Jan 2020 09:47:30: Sorting the merged items by negative selection... 
+INFO  @ Mon, 20 Jan 2020 09:47:31: Loading top 10 genes from mageck_essential.gene.low.txt: GPR174,PHOSPHO2-KLHL23,KLHL29,ECH1,GALNT3,GGPS1,MAGT1,SATB2,ALDH1B1,PSTK 
+DEBUG @ Mon, 20 Jan 2020 09:47:31: Column index:3 
+INFO  @ Mon, 20 Jan 2020 09:47:31: Loading top 10 genes from mageck_essential.gene.high.txt: OR11H1,FBXO47,DPM1,CPT1B,VSIG10L,TPST2,PPIAL4G,STBD1,THSD7A,PRRC2B 
+DEBUG @ Mon, 20 Jan 2020 09:47:31: Column index:9 
+INFO  @ Mon, 20 Jan 2020 09:47:32: Running command: rm mageck_essential.plow.txt 
+INFO  @ Mon, 20 Jan 2020 09:47:32: Running command: rm mageck_essential.phigh.txt 
+INFO  @ Mon, 20 Jan 2020 09:47:32: Running command: rm mageck_essential.gene.low.txt 
+INFO  @ Mon, 20 Jan 2020 09:47:32: Running command: rm mageck_essential.gene.high.txt 
