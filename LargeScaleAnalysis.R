@@ -53,6 +53,10 @@ control_list = mageck_input$sgRNA[mageck_input$gene == "Control"]
 write.table(mageck_input, file = "Mageck_Input.tsv", quote = F, row.names = F, sep = "\t")
 write.table(control_list, file = "Control.txt" , quote = F, row.names = F, col.names = F)
 
+mageck_results = read.table('./Mageck_Translation_Reduced/mageck_translation_reduced.gene_summary.txt', header = T)
+m1 = merge(mageck_results, k562_expression, by.x = "id", by.y = "Description")
+write.csv(m1, './Mageck_Translation_Reduced/Magech_translation_reduced_wExpression.gene_summary.csv')
+
 # Total Number of reads per condition
 colSums(all_sgRNA_counts)
 
