@@ -18,14 +18,34 @@ reduced_3 = read.table('./Bru_hyg_6_1.txt', header= T)
 
 plasmid = read.table('./Bru_hyg_parent.txt', header = T)
 
+control_day20_1 = read.table('./10_28_2019/Readcount_191203_193549_9370/Bru_hyg_sorted_day_20_control_1.txt', header= T)
+control_day20_2 = read.table('./10_28_2019/Readcount_191203_193549_9370/Bru_hyg_sorted_day_20_control_2.txt', header= T)
+
+newgate_increased = read.table('./10_28_2019/Readcount_191203_193549_9370/Bru_hyg_sorted_newgate_Increased_TA.txt', header = T)
+newgate_reduced = read.table('./10_28_2019/Readcount_191203_193549_9370/Bru_hyg_sorted_newgate_Reduced_TA_1.txt', header = T)
+
+
 all_sgRNA_counts = cbind(plasmid$Count, control_1$Count, control_2$Count,
                          increased_1$Count, 
-                         reduced_1$Count, reduced_2$Count, reduced_3$Count )
+                         reduced_1$Count, reduced_2$Count, reduced_3$Count, 
+                         control_day20_1$Count, control_day20_2$Count, 
+                         newgate_increased$Count, newgate_reduced$Count)
 row.names( all_sgRNA_counts )  = plasmid$sgRNA
 colnames(all_sgRNA_counts) = c( "Plasmid", "Control_1", "Control_2", 
                                 "Increased_1", 
-                                "Reduced_1", "Reduced_2", "Reduced_3" )
+                                "Reduced_1", "Reduced_2", "Reduced_3", 
+                                "Control20_1", "Control20_2", 
+                                "StringentGateIncreased", "StringentGateDecreased")
 # write.csv(all_sgRNA_counts, file = "All_sgRNA_Counts_Merged.csv")
+
+mageck_input = all_sgRNA_counts[,c(2,3,8,9,6,7, 11)]
+mageck_input = as.data.frame(mageck_input ) 
+mageck_input$gene = gene_names
+mageck_input$sgRNA = row.names(mageck_input)
+mageck_input = mageck_input[,c(9,8,1:7)]
+control_list = mageck_input$sgRNA[mageck_input$gene == "Control"] 
+write.table(mageck_input, file = "Mageck_Input.tsv", quote = F, row.names = F, sep = "\t")
+write.table(control_list, file = "Control.txt" , quote = F, row.names = F, col.names = F)
 
 # Total Number of reads per condition
 colSums(all_sgRNA_counts)
@@ -37,12 +57,22 @@ normalized_all_sgRNA_counts  = t(normalized_all_sgRNA_counts)
 write.csv (normalized_all_sgRNA_counts, file = "Normalized_sgRNA_counts.csv")
 
 # Number of sgRNAs with counts less than threshold
-threshold = 1
+threshold = 5
 round ( apply (all_sgRNA_counts, 2, function (x){sum (x < threshold) }) / nrow(all_sgRNA_counts), 2 ) 
 
 plot(all_sgRNA_counts[,2], all_sgRNA_counts[,3], pch = 19, cex = .2, xlab = "Control_1", ylab = "Control_2")
 plot(all_sgRNA_counts[,1], all_sgRNA_counts[,3], pch = 19, cex = .2, xlab = "Plasmid", ylab = "Control_2", 
      xlim = c(0, 300))
+
+plot(normalized_all_sgRNA_counts[,2] + normalized_all_sgRNA_counts[,3],
+     normalized_all_sgRNA_counts[,8] + normalized_all_sgRNA_counts[,9],
+     pch = 19, cex = .2, xlab = "Control", ylab = "Control_day20", ylim=c(0,140))
+
+plot(normalized_all_sgRNA_counts[,8] + normalized_all_sgRNA_counts[,9],
+     normalized_all_sgRNA_counts[,11] ,
+     pch = 19, cex = .2, log = "xy", las=2, 
+     xlab = "Control", ylab = "StringentReduced")
+)
 
 # Overall correlation between the sgRNA counts
 round ( cor (all_sgRNA_counts, method = "spearman") , 3 ) 
@@ -63,12 +93,20 @@ plot(all_sgRNA_counts[,1], all_sgRNA_counts[,3], pch = 19, cex = .2, xlab = "Pla
 boxplot (  ( all_sgRNA_counts[,2] + all_sgRNA_counts[,3] ) / all_sgRNA_counts[,1] ~ color_vector, 
            varwidth = T, ylab = "Control Sum to Plasmid Ratio", names = c("Nonessential", "Essential")) 
 
-boxplot (  ( all_sgRNA_counts[,2] + all_sgRNA_counts[,3] ) / all_sgRNA_counts[,1] ~ color_vector, 
+b1 = boxplot (  ( all_sgRNA_counts[,2] + all_sgRNA_counts[,3] ) / all_sgRNA_counts[,1] ~ color_vector, 
            varwidth = T, ylab = "Control to Plasmid Ratio", names = c("Nonessential", "Essential"), 
            ylim = c (0, 3 ) ) 
 
+b2 = boxplot (  ( all_sgRNA_counts[,8] + all_sgRNA_counts[,9] ) / all_sgRNA_counts[,1] ~ color_vector, 
+           varwidth = T, ylab = "Control to Plasmid Ratio", names = c("Nonessential", "Essential"), 
+           ylim = c (0, 5 ) ) 
+b2$stats[,1] / b2$stats[,2]
+b1$stats[,1] / b1$stats[,2]
+
 # What is the ratio of the Control sgRNAs in Control to Plasmid, or Control to Sorted? 
 control_sgRNAs = normalized_all_sgRNA_counts[gene_names == "Control", ]
+
+# There is a very mild depletion in the median Control sgRNA count in the stringent gates
 boxplot(control_sgRNAs)
 
 # Read counts for known translation factors 
@@ -135,6 +173,15 @@ enriched_in_ratio_reduced1 = ratio_reduced1_control > 1.7
 # The difference in the threshold suggest second reduced is better 
 enriched_in_ratio_reduced2 = ratio_reduced2_control > 1.485
 enriched_in_ratio_reduced3 = ratio_reduced3_control > 1.497
+
+enriched_in_ratio_newreduced = 2* normalized_all_sgRNA_counts[,11] / (normalized_all_sgRNA_counts[,8] +
+                                                                  normalized_all_sgRNA_counts[,9] + 
+                                                                    1 )  > 1.75
+enriched_in_ratio_newreduced = 2* normalized_all_sgRNA_counts[,11] / (normalized_all_sgRNA_counts[,8] +
+                                                                        normalized_all_sgRNA_counts[,9] + 
+                                                                        1 )  > 3.2
+head ( sort ( table ( gene_names[enriched_in_ratio_newreduced] ), decreasing = T ) ) 
+
 head ( sort ( table ( gene_names[enriched_in_ratio_reduced3] ), decreasing = T ) ) 
 
 enrichment_matrix = cbind (enriched_in_ratio_reduced1, 
